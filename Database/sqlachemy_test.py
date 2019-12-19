@@ -262,3 +262,11 @@ session.query(Item).filter(Item.name.ilike("w%")).all()
 # NOT LIKE
 '''session.query(Item).filter(not_(Item.name.like("W%"))).all()'''
 
+# LIMIT METHOD
+session.query(Customer).limit(2).all()
+session.query(Customer).filter(Customer.address.ilike("%avenue")).limit(2).all()
+
+session.query(Customer).limit(2).offset(2).all()
+
+print(session.query(Customer).limit(2).offset(2))
+
