@@ -196,3 +196,14 @@ session.commit()
 '''
 QUERYING DATA
 '''
+# ALL METHOD
+session.query(Customer).all()
+
+print(session.query(Customer))
+
+q = session.query(Customer)
+
+for c in q:
+    print(c.id, c.first_name)
+
+session.query(Customer.id, Customer.first_name).all()
