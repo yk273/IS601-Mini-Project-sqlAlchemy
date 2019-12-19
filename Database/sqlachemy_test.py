@@ -1,3 +1,7 @@
+'''
+CREATING SESSION
+'''
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -16,6 +20,10 @@ Base = declarative_base()
 # this instantiates the session object
 session = Session()
 
+'''
+INSERTING DATA
+'''
+
 
 # Setting up classes (creates the record objects and defines the schema)
 
@@ -33,7 +41,7 @@ class Customer(Base):
 
 class Item(Base):
     __tablename__ = 'item'
-    # Here we define columns for the table customer
+    # Here we define columns for the table item
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     cost_price = Column(Integer)
@@ -43,18 +51,18 @@ class Item(Base):
 
 class Order(Base):
     __tablename__ = 'order'
-    # Here we define columns for the table customer
+    # Here we define columns for the table order
     id = Column(Integer, primary_key=True)
     customer_id = Column(Integer, ForeignKey('customer.id'))
 
     customer = relationship("Customer", backref='order')
 
-    #order_lines = Column(Integer,
+    # order_lines = Column(Integer,
 
 
 class OrderLine(Base):
     __tablename__ = 'order_line'
-    # Here we define columns for the table customer
+    # Here we define columns for the table orderline
     id = Column(Integer, primary_key=True)
     order = Column(Integer, ForeignKey('order.id'))
 
@@ -65,6 +73,7 @@ class OrderLine(Base):
     item_id = relationship("Item", backref="order_line")
 
     quantity = Column(Integer)
+
 
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
@@ -82,7 +91,6 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
-# Insert a Customer in the customer table
 c1 = Customer(first_name='Toby',
               last_name='Miller',
               username='tmiller',
@@ -90,7 +98,6 @@ c1 = Customer(first_name='Toby',
               address='1662 Kinney Street',
               town='Wolfden')
 
-# Insert a Customer in the customer table
 c2 = Customer(first_name='Scott',
               last_name='Harvey',
               username='scottharvey',
@@ -179,12 +186,13 @@ o3 = Order(customer=c1)
 orderline1 = OrderLine(item=i1, quantity=5)
 orderline2 = OrderLine(item=i2, quantity=10)
 
-#o3.order_lines.append(orderline1)
-#o3.order_lines.append(orderline2)
+# o3.order_lines.append(orderline1)
+# o3.order_lines.append(orderline2)
 
 session.add_all([o3])
 
 session.commit()
 
-
-
+'''
+QUERYING DATA
+'''
