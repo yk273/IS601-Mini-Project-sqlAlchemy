@@ -57,9 +57,6 @@ class Order(Base):
 
     customer = relationship("Customer", backref='order')
 
-    # order_lines = Column(Integer,
-
-
 class OrderLine(Base):
     __tablename__ = 'order_line'
     # Here we define columns for the table orderline
@@ -212,4 +209,56 @@ session.query(Customer.id, Customer.first_name).all()
 session.query(Customer).get(1)
 session.query(Item).get(1)
 session.query(Order).get(100)
+
+# FILTER METHOD
+session.query(Customer).filter(Customer.first_name == 'John').all()
+
+print(session.query(Customer).filter(Customer.first_name == 'John'))
+
+session.query(Customer).filter(Customer.id <= 5, Customer.town == "Norfolk").all()
+
+print(session.query(Customer).filter(Customer.id <= 5, Customer.town.like("Nor%")))
+
+'''
+# find all customers who either live in Peterbrugh or Norfolk
+
+session.query(Customer).filter(or_(
+    Customer.town == 'Peterbrugh',
+    Customer.town == 'Norfolk'
+)).all()
+
+# find all customers whose first name is John and live in Norfolk
+
+session.query(Customer).filter(and_(
+    Customer.first_name == 'John',
+    Customer.town == 'Norfolk'
+)).all()
+
+# find all johns who don't live in Peterbrugh
+
+session.query(Customer).filter(and_(
+    Customer.first_name == 'John',
+    not_(
+        Customer.town == 'Peterbrugh',
+    )
+)).all()
+'''
+
+# IS NULL
+'''session.query(Order).filter(Order.date_shipped == None).all()'''
+# IS NOT NULL
+'''session.query(Order).filter(Order.date_shipped != None).all()'''
+# IN
+session.query(Customer).filter(Customer.first_name.in_(['Toby', 'Sarah'])).all()
+# NOT IN
+session.query(Customer).filter(Customer.first_name.notin_(['Toby', 'Sarah'])).all()
+# BETWEEN
+session.query(Item).filter(Item.cost_price.between(10, 50)).all()
+# NOT BETWEEN
+'''session.query(Item).filter(not_(Item.cost_price.between(10, 50))).all()'''
+# LIKE
+session.query(Item).filter(Item.name.like("%r")).all()
+session.query(Item).filter(Item.name.ilike("w%")).all()
+# NOT LIKE
+'''session.query(Item).filter(not_(Item.name.like("W%"))).all()'''
 
