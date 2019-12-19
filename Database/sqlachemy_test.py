@@ -277,3 +277,40 @@ session.query(Item).filter(Item.name.ilike("wa%")).order_by(Item.cost_price).all
 from sqlalchemy import desc
 session.query(Item).filter(Item.name.ilike("wa%")).order_by(desc(Item.cost_price)).all()
 
+# JOIN METHOD
+session.query(Customer).join(Order).all()
+
+print(session.query(Customer).join(Order))
+
+session.query(Customer.id, Customer.username, Order.id).join(Order).all()
+
+# session.query(Table1).join(Table2).join(Table3).join(Table4).all()
+'''
+session.query(
+    Customer.first_name,
+    Item.name,
+    Item.selling_price,
+    OrderLine.quantity
+).join(Order).join(OrderLine).join(Item).filter(
+    Customer.first_name == 'John',
+    Customer.last_name == 'Green',
+    Order.id == 1,
+).all()
+'''
+
+# OUTER JOIN
+'''
+session.query(
+    Customer.first_name,
+    Order.id,
+).outerjoin(Order).all()
+
+session.query(
+    Customer.first_name,
+    Order.id,
+).outerjoin(Order, full=True).all()
+'''
+
+
+
+
