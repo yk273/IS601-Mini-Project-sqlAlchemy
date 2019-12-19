@@ -207,3 +207,9 @@ for c in q:
     print(c.id, c.first_name)
 
 session.query(Customer.id, Customer.first_name).all()
+
+# GET METHOD
+session.query(Customer).get(1)
+session.query(Item).get(1)
+session.query(Order).get(100)
+
