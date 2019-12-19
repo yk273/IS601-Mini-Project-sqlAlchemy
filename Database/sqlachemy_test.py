@@ -16,6 +16,7 @@ Base = declarative_base()
 # this instantiates the session object
 session = Session()
 
+
 # Setting up classes (creates the record objects and defines the schema)
 
 class Customer(Base):
@@ -29,6 +30,7 @@ class Customer(Base):
     address = Column(String(250), nullable=False)
     town = Column(String(250), nullable=False)
 
+
 class Item(Base):
     __tablename__ = 'item'
     # Here we define columns for the table customer
@@ -36,6 +38,32 @@ class Item(Base):
     name = Column(String(250), nullable=False)
     cost_price = Column(Integer)
     selling_price = Column(Integer)
+    quantity = Column(Integer)
+
+
+class Order(Base):
+    __tablename__ = 'order'
+    # Here we define columns for the table customer
+    id = Column(Integer, primary_key=True)
+    customer_id = Column(Integer, ForeignKey('customer.id'))
+
+    customer = relationship("Customer", backref='order')
+
+    #order_lines = Column(Integer,
+
+
+class OrderLine(Base):
+    __tablename__ = 'order_line'
+    # Here we define columns for the table customer
+    id = Column(Integer, primary_key=True)
+    order = Column(Integer, ForeignKey('order.id'))
+
+    order_id = relationship("Order", backref="order_line")
+
+    item = Column(Integer, ForeignKey('item.id'))
+
+    item_id = relationship("Item", backref="order_line")
+
     quantity = Column(Integer)
 
 # Create all tables in the engine. This is equivalent to "Create Table"
@@ -132,3 +160,31 @@ i8 = Item(name='Water Bottle', cost_price=20.89, selling_price=25, quantity=50)
 
 session.add_all([i1, i2, i3, i4, i5, i6, i7, i8])
 session.commit()
+
+o1 = Order(customer=c1)
+o2 = Order(customer=c1)
+
+line_item1 = OrderLine(order=o1, item=i1, quantity=3)
+line_item2 = OrderLine(order=o1, item=i2, quantity=2)
+line_item3 = OrderLine(order=o2, item=i1, quantity=1)
+line_item3 = OrderLine(order=o2, item=i2, quantity=4)
+
+session.add_all([o1, o2])
+
+session.new
+session.commit()
+
+o3 = Order(customer=c1)
+
+orderline1 = OrderLine(item=i1, quantity=5)
+orderline2 = OrderLine(item=i2, quantity=10)
+
+#o3.order_lines.append(orderline1)
+#o3.order_lines.append(orderline2)
+
+session.add_all([o3])
+
+session.commit()
+
+
+
