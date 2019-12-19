@@ -339,3 +339,20 @@ session.query(
     func.count(distinct(Customer.town)),
     func.count(Customer.town)
 ).all()
+
+'''
+CASTING
+'''
+'''
+from sqlalchemy import cast, Date, distinct, union
+
+session.query(
+    cast(func.pi(), Integer),
+    cast(func.pi(), Numeric(10, 2)),
+    cast("2010-12-01", DateTime),
+    cast("2010-12-01", Date),
+).all()
+'''
+
+
+
