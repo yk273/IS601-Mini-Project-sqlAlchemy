@@ -1,3 +1,3 @@
-# Mini Project - sqlAlchemy
+# Mini Project: sqlAlchemy
 
 Yana Kokit
